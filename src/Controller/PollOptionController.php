@@ -22,7 +22,7 @@ class PollOptionController extends AbstractController
     public function index(Poll $poll, PollOptionRepository $pollOptionRepository): Response
     {
         return $this->render('poll_option/index.html.twig', [
-            'poll_options' => $pollOptionRepository->findAll(),
+            'poll_options' => $pollOptionRepository->findBy(['poll' => $poll->getId()]),
             'poll' => $poll
         ]);
     }
