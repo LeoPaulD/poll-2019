@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PollOption{% endblock %}
+
+{% block body %}
+    <h1>PollOption</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ poll_option.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ poll_option.name }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('poll_option_index') }}">back to list</a>
+
+    <a href="{{ path('poll_option_edit', {'id': poll_option.id}) }}">edit</a>
+
+    {{ include('poll_option/_delete_form.html.twig') }}
+{% endblock %}

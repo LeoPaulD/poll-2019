@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PollOption index{% endblock %}
+
+{% block body %}
+    <h1 class="h3 mb-3 font-weight-normal">
+    Options du sondage "{{ poll.title }}"
+    </h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for poll_option in poll_options %}
+            <tr>
+                <td>{{ poll_option.name }}</td>
+                <td>
+                    <a href="{{ path('poll_option_edit', {'id': poll_option.id}) }}">éditer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">pas d'option</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-success" href="{{ path('poll_option_new', {poll: poll.id}) }}">Ajouter une option</a>
+{% endblock %}

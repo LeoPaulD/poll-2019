@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New PollOption{% endblock %}
+
+{% block body %}
+    <h3>Ajouter une option</h3>
+
+    {{ include('poll_option/_form.html.twig') }}
+
+    <hr/>
+    <a href="{{ path('poll_option_index', {poll: poll.id}) }}">retour à la liste des options</a>
+{% endblock %}
