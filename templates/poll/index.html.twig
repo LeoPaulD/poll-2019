@@ -18,12 +18,15 @@
         {% for poll in polls %}
             <tr>
                 <td>{{ poll.creationDate ? poll.creationDate|date('d/m/Y H:i:s') : '' }}</td>
-                <td>{{ poll.title }}</td>
+                <td>
+                    <a href="{{ path('poll_show', {'id': poll.id}) }}">
+                    {{ poll.title }}
+                    </a>
+                </td>
                 <td>
                     <a href="{{ path('poll_option_index', {'poll': poll.id}) }}">éditer les options</a>
                 </td>
                 <td>
-                    <a href="{{ path('poll_show', {'id': poll.id}) }}">voir</a>
                     <a href="{{ path('poll_edit', {'id': poll.id}) }}">éditer</a>
                 </td>
             </tr>
