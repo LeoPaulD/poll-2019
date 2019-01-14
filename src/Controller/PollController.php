@@ -21,8 +21,9 @@ class PollController extends AbstractController
      * @Route("/", name="poll_index", methods={"GET"})
      */
     public function index(PollRepository $pollRepository): Response
-    {
-        return $this->render('poll/index.html.twig', ['polls' => $pollRepository->findAll()]);
+    {   $user = $this->getUser();
+        $id = $user -> getId();
+        return $this->render('poll/index.html.twig', ['polls' => $pollRepository->findBy(['user'=>$id])]);
     }
 
     /**
@@ -56,6 +57,10 @@ class PollController extends AbstractController
     {
         $builder = $this->createFormBuilder();
         $choices = [];
+        $user = $poll->getUser();
+        $mail = $user->getEmail();
+        
+        
         foreach ($poll->getPollOptions() as $option) {
             $choices[$option->getName()] = $option->getId();
         }
@@ -71,7 +76,9 @@ class PollController extends AbstractController
 
         return $this->render('poll/show.html.twig', [
             'poll' => $poll,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'mail' => $mail
+            
         ]);
     }
 

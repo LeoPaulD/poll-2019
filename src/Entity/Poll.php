@@ -38,10 +38,16 @@ class Poll
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PollVote", mappedBy="poll", orphanRemoval=true)
+     */
+    private $pollVotes;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime();
         $this->pollOptions = new ArrayCollection();
+        $this->pollVotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,6 +118,37 @@ class Poll
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PollVote[]
+     */
+    public function getPollVotes(): Collection
+    {
+        return $this->pollVotes;
+    }
+
+    public function addPollVote(PollVote $pollVote): self
+    {
+        if (!$this->pollVotes->contains($pollVote)) {
+            $this->pollVotes[] = $pollVote;
+            $pollVote->setPoll($this);
+        }
+
+        return $this;
+    }
+
+    public function removePollVote(PollVote $pollVote): self
+    {
+        if ($this->pollVotes->contains($pollVote)) {
+            $this->pollVotes->removeElement($pollVote);
+            // set the owning side to null (unless already changed)
+            if ($pollVote->getPoll() === $this) {
+                $pollVote->setPoll(null);
+            }
+        }
 
         return $this;
     }

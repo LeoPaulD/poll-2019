@@ -42,9 +42,15 @@ class User implements UserInterface
      */
     private $polls;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PollVote", mappedBy="user", orphanRemoval=true)
+     */
+    private $pollVotes;
+
     public function __construct()
     {
         $this->polls = new ArrayCollection();
+        $this->pollVotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -64,7 +70,7 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
+    /**                                         
      * A visual identifier that represents this user.
      *
      * @see UserInterface
@@ -150,6 +156,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($poll->getUser() === $this) {
                 $poll->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PollVote[]
+     */
+    public function getPollVotes(): Collection
+    {
+        return $this->pollVotes;
+    }
+
+    public function addPollVote(PollVote $pollVote): self
+    {
+        if (!$this->pollVotes->contains($pollVote)) {
+            $this->pollVotes[] = $pollVote;
+            $pollVote->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePollVote(PollVote $pollVote): self
+    {
+        if ($this->pollVotes->contains($pollVote)) {
+            $this->pollVotes->removeElement($pollVote);
+            // set the owning side to null (unless already changed)
+            if ($pollVote->getUser() === $this) {
+                $pollVote->setUser(null);
             }
         }
 
