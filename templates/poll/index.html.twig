@@ -3,40 +3,40 @@
 {% block title %}Poll index{% endblock %}
 
 {% block body %}
-    <h1 class="h3 mb-3 font-weight-normal">Sondages</h1>
+<h1 class="h3 mb-3 font-weight-normal">Sondages</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Titre</th>
-                <th>Options</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Titre</th>
+            <th>Options</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for poll in polls %}
-            <tr>
-                <td>{{ poll.creationDate ? poll.creationDate|date('d/m/Y H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('poll_show', {'id': poll.id}) }}">
+        <tr>
+            <td>{{ poll.creationDate ? poll.creationDate|date('d/m/Y H:i:s') : '' }}</td>
+            <td>
+                <a href="{{ path('poll_show', {'id': poll.id}) }}">
                     {{ poll.title }}
-                    </a>
-                </td>
-                <td>
-                    <a href="{{ path('poll_option_index', {'poll': poll.id}) }}">éditer les options</a>
-                </td>
-                <td>
-                    <a href="{{ path('poll_edit', {'id': poll.id}) }}">éditer</a>
-                </td>
-            </tr>
+                </a>
+            </td>
+            <td>
+                Il y a {{ poll.pollOptions | length }} option(s) (<a href="{{ path('poll_option_index', {'poll': poll.id}) }}">éditer</a>)
+            </td>
+            <td>
+                <a href="{{ path('poll_edit', {'id': poll.id}) }}">éditer</a>
+            </td>
+        </tr>
         {% else %}
-            <tr>
-                <td colspan="4">aucun sondage</td>
-            </tr>
+        <tr>
+            <td colspan="4">aucun sondage</td>
+        </tr>
         {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
+</table>
 
-    <a class="btn btn-success" href="{{ path('poll_new') }}">Nouveau sondage</a>
+<a class="btn btn-success" href="{{ path('poll_new') }}">Nouveau sondage</a>
 {% endblock %}
