@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,6 +36,16 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Poll", mappedBy="user")
+     */
+    private $polls;
+
+    public function __construct()
+    {
+        $this->polls = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -111,5 +123,36 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Poll[]
+     */
+    public function getPolls(): Collection
+    {
+        return $this->polls;
+    }
+
+    public function addPoll(Poll $poll): self
+    {
+        if (!$this->polls->contains($poll)) {
+            $this->polls[] = $poll;
+            $poll->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePoll(Poll $poll): self
+    {
+        if ($this->polls->contains($poll)) {
+            $this->polls->removeElement($poll);
+            // set the owning side to null (unless already changed)
+            if ($poll->getUser() === $this) {
+                $poll->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

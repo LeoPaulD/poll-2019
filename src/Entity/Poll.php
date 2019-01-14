@@ -33,6 +33,11 @@ class Poll
      */
     private $pollOptions;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="polls")
+     */
+    private $user;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime();
@@ -95,6 +100,18 @@ class Poll
                 $pollOption->setPoll(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
