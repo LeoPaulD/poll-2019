@@ -6,7 +6,11 @@
     <p>
     Vous pourrez ici réaliser vos sondages
     </p>
-
+    {% for poll in polls %}
+         <a href="{{ path('poll_show', {'id': poll.id}) }}">
+                {{ poll.title }}
+        </a>
+    {% endfor %}
     <p>
         <a class="btn btn-primary" href="{{ path('app_register') }}">Inscription &raquo;</a>
         <a class="btn btn-primary" href="{{ path('app_login') }}">Connexion &raquo;</a>

@@ -5,12 +5,16 @@ namespace App\Controller;
 use App\Entity\Poll;
 use App\Form\PollType;
 use App\Repository\PollRepository;
+use App\Repository\PollVoteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Entity\PollVote;
+use App\Entity\PollOption;
+use App\Entity\User;
 
 /**
  * @Route("/poll")
@@ -49,21 +53,28 @@ class PollController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    
+    
 
     /**
-     * @Route("/{id}", name="poll_show", methods={"GET"})
+     * @Route("/{id}", name="poll_show", methods={"GET", "POST"})
      */
-    public function show(Poll $poll): Response
+    public function show(Request $request, Poll $poll, PollVoteRepository $pollVoteRepository): Response
     {
         $builder = $this->createFormBuilder();
         $choices = [];
         $user = $poll->getUser();
         $mail = $user->getEmail();
+        $pollVerifUser=$pollVoteRepository->findBy([ 'user' => $user, 'poll' => $poll]);
         
+        
+
         
         foreach ($poll->getPollOptions() as $option) {
             $choices[$option->getName()] = $option->getId();
-        }
+        }$entityManager = $this->getDoctrine()->getManager();
+        // $entityManager->persist($user);
+        // $entityManager->flush();
         $builder->add('choice', ChoiceType::class, [
             'label' => 'Votre réponse:',
             'choices' => $choices,
@@ -73,13 +84,36 @@ class PollController extends AbstractController
             'label' => 'Voter'
         ]);
         $form = $builder->getForm();
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $id_user = $user -> getId();
+            $data = $form->getData();
+            $option = $data['choice'];
+
+            $poll_id = $poll -> getId();
+
+            
+            $vote = new PollVote(); 
+            $vote ->setUser($entityManager->getReference(User::class, $id_user));
+            $vote ->setPoll($entityManager->getReference(Poll::class, $poll_id));
+            $vote ->setPollOption($entityManager->getReference(PollOption::class, $option));
+
+        
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($vote);
+            $entityManager->flush();
+        }
         return $this->render('poll/show.html.twig', [
             'poll' => $poll,
             'form' => $form->createView(),
-            'mail' => $mail
+            'mail' => $mail,
+            'pollVerifUser' => $pollVerifUser
             
         ]);
+
     }
 
     /**
@@ -95,10 +129,10 @@ class PollController extends AbstractController
 
             return $this->redirectToRoute('poll_index', ['id' => $poll->getId()]);
         }
-
+        
         return $this->render('poll/edit.html.twig', [
             'poll' => $poll,
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ]);
     }
 
