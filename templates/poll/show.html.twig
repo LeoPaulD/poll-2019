@@ -9,7 +9,7 @@
     <h3>Sondage</h3>
     <h5>Créé par {{mail}} le {{ poll.creationDate|date('d/m/Y') }}</h5>
     <hr/>
-    {% if  pollVerifUser is empty %} 
+    {% if not pollVerifUser  %} 
         <h4>{{ poll.title }}</h4>
 
         {{ form(form) }}

@@ -66,15 +66,14 @@ class PollController extends AbstractController
         $user = $poll->getUser();
         $mail = $user->getEmail();
         $pollVerifUser=$pollVoteRepository->findBy([ 'user' => $user, 'poll' => $poll]);
-    
+        
         
 
         
         foreach ($poll->getPollOptions() as $option) {
             $choices[$option->getName()] = $option->getId();
         }$entityManager = $this->getDoctrine()->getManager();
-        // $entityManager->persist($user);
-        // $entityManager->flush();
+
         $builder->add('choice', ChoiceType::class, [
             'label' => 'Votre réponse:',
             'choices' => $choices,
@@ -105,7 +104,7 @@ class PollController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($vote);
             $entityManager->flush();
-            return $this->redirectToRoute('poll_index');
+            return $this->redirectToRoute('home');
         }
         return $this->render('poll/show.html.twig', [
             'poll' => $poll,
