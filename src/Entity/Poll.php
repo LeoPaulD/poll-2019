@@ -121,19 +121,7 @@ class Poll
 
         return $this;
     }
-    // /**
-    //  * @param User $user
-    //  * @return pollVote | null
-    //  */
-    // public function getvoteFromUser(User $user)
-    // {
-    //     foreach($this->pollVotes as $pollVote)
-    //     {
-    //         if($poll->getUser()===$user) 
-    //         return $pollVote;
-    //     }
-    //     return null;
-    // }
+    
     /**
      * @return Collection|PollVote[]
      */
