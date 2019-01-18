@@ -16,7 +16,7 @@ class HomeController extends AbstractController
 
     {   
         $entityManager = $this->getDoctrine()->getManager();   
-        $polls=$entityManager->getRepository(Poll::class)->findBy(array(), array('id' => 'DESC'),8);
+        $polls=$entityManager->getRepository(Poll::class)->findBy(array(), array('creationDate' => 'DESC'),8);
         return $this->render('home/index.html.twig',[
             'polls' => $polls,
         ]);
