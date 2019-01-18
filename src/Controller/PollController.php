@@ -63,8 +63,9 @@ class PollController extends AbstractController
     {
         $builder = $this->createFormBuilder();
         $choices = [];
-        $user = $poll->getUser();
-        $mail = $user->getEmail();
+        $user = $this->getUser();
+        $userPoll = $poll->getUser();
+        $mail = $userPoll->getEmail();
         $pollVerifUser=$pollVoteRepository->findBy([ 'user' => $user, 'poll' => $poll]);        
         
 
