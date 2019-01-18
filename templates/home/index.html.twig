@@ -6,14 +6,33 @@
     <p>
     Vous pourrez ici réaliser vos sondages
     </p>
+    
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Titre</th>
+            <th>Options</th>
+            
+        </tr>
+    </thead>
+    <tbody>
     {% for poll in polls %}
-         <a href="{{ path('poll_show', {'id': poll.id}) }}">
-                {{ poll.title }}
-        </a>
+         
+        <tr>
+            <td>{{ poll.creationDate ? poll.creationDate|date('d/m/Y H:i:s') : '' }}</td>
+            <td>
+                <a href="{{ path('poll_show', {'id': poll.id}) }}">
+                    {{ poll.title }}
+                </a>
+            </td>
+            <td>
+                Il y a {{ poll.pollOptions | length }} option(s) 
+            </td>
+           
+        </tr>
     {% endfor %}
-    <p>
-        <a class="btn btn-primary" href="{{ path('app_register') }}">Inscription &raquo;</a>
-        <a class="btn btn-primary" href="{{ path('app_login') }}">Connexion &raquo;</a>
-    </p>
+    </tbody>
+</table>
 </div>
 {% endblock %}

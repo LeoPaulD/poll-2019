@@ -66,7 +66,7 @@ class PollController extends AbstractController
         $user = $poll->getUser();
         $mail = $user->getEmail();
         $pollVerifUser=$pollVoteRepository->findBy([ 'user' => $user, 'poll' => $poll]);
-        
+    
         
 
         
@@ -105,6 +105,7 @@ class PollController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($vote);
             $entityManager->flush();
+            return $this->redirectToRoute('poll_index');
         }
         return $this->render('poll/show.html.twig', [
             'poll' => $poll,

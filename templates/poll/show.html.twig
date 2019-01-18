@@ -9,23 +9,25 @@
     <h3>Sondage</h3>
     <h5>Créé par {{mail}} le {{ poll.creationDate|date('d/m/Y') }}</h5>
     <hr/>
-    {% if  pollVerifUser is null %} 
-    <h4>{{ poll.title }}</h4>
+    {% if  pollVerifUser is empty %} 
+        <h4>{{ poll.title }}</h4>
 
-    {{ form(form) }}
-    
+        {{ form(form) }}
+        
         
     
 
-    {% else %}
-  
-    <h5>Résultats</h5>
-    {% for option in poll.pollOptions %}
-    <h6>{{ option.name }}</h6>
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: {{ ((option.pollVotes |length)/(poll.pollVotes |length)*100 )| round }}%;">{{ ((option.pollVotes |length)/(poll.pollVotes |length)*100 )| round }}%</div>
-    </div>
-    {% endfor %}
-    {% endif %} 
+    
+       
+        {% else %}
+            
+        <h5>Résultats</h5>
+        {% for option in poll.pollOptions %}
+            <h6>{{ option.name }}</h6>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: {{ option.pollVotes|length > 0 ? ((option.pollVotes|length)/(poll.pollVotes |length)*100 )| round : "0" }}%;">{{ option.pollVotes|length > 0 ? ((option.pollVotes|length)/(poll.pollVotes |length)*100 )| round : "0" }}%</div>
+            </div>
+        {% endfor %}
+        {% endif %} 
 
 {% endblock %}
