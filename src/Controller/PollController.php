@@ -65,8 +65,7 @@ class PollController extends AbstractController
         $choices = [];
         $user = $poll->getUser();
         $mail = $user->getEmail();
-        $pollVerifUser=$pollVoteRepository->findBy([ 'user' => $user, 'poll' => $poll]);
-        
+        $pollVerifUser=$pollVoteRepository->findBy([ 'user' => $user, 'poll' => $poll]);        
         
 
         
@@ -121,8 +120,15 @@ class PollController extends AbstractController
      */
     public function edit(Request $request, Poll $poll): Response
     {
+        if ($poll->getUser()->getId() != $this->getUser()->getId())
+        {
+            return $this->redirectToRoute('home');
+        }
+
+        echo $poll->getUser()->getId();
         $form = $this->createForm(PollType::class, $poll);
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
@@ -134,6 +140,7 @@ class PollController extends AbstractController
             'poll' => $poll,
             'form' => $form->createView()
         ]);
+        
     }
 
     /**

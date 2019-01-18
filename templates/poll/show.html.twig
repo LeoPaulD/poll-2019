@@ -11,13 +11,11 @@
     <hr/>
     {% if not pollVerifUser  %} 
         <h4>{{ poll.title }}</h4>
-
-        {{ form(form) }}
-        
-        
-    
-
-    
+        {% for option in poll.pollOptions %}
+            {{ form(form) }}
+        {% else %}
+            pas d'option
+        {% endfor %}
        
         {% else %}
             
